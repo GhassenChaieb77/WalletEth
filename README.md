@@ -1,5 +1,33 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
+## Project Overview
+This project is a Next.js application that demonstrates how to connect to an Ethereum wallet, send transactions, and interact with ERC-20 tokens using the Wagmi library. It includes two main components:
+
+SendTransaction: This component provides a user interface for sending transactions to the Ethereum blockchain. It allows users to enter the recipient address, transaction amount, and optional message.
+
+LoadERC20Token: This component retrieves information about an ERC-20 token and displays it to the user. It shows the token name, symbol, and balance of the connected user.
+
+Technologies Used
+The project is built using the following technologies:
+
+Next.js: Next.js is a React framework that provides features for building server-side rendered and static web applications. It simplifies the development process and improves application performance.
+
+Wagmi: Wagmi is a JavaScript library that offers a set of hooks for interacting with Ethereum wallets from React applications. It streamlines the process of connecting to wallets, sending transactions, and interacting with smart contracts.
+
+ethers.js: ethers.js is a JavaScript library that provides tools for interacting with the Ethereum blockchain. Wagmi utilizes it to connect to the blockchain and send transactions.
+
+SendTransaction: SendTransaction is a custom component that facilitates sending transactions to the Ethereum blockchain. It presents a user interface for entering transaction details and submitting the transaction.
+
+LoadERC20Token: LoadERC20Token is a custom component that retrieves information about an ERC-20 token and displays it to the user. It showcases the token name, symbol, and balance of the connected user.
+
+## Additional Tools
+In addition to these core technologies, the project utilizes the following tools:
+
+create-next-app: create-next-app is a tool that simplifies the process of setting up and configuring the development environment for Next.js applications.
+
+next/font: next/font is a Next.js plugin that automatically optimizes and loads fonts, improving application performance by reducing the number of HTTP requests required for font loading.
+
+
 ## Getting Started
 
 First, run the development server:

@@ -30,7 +30,12 @@ next/font: next/font is a Next.js plugin that automatically optimizes and loads 
 
 ## Getting Started
 
-First, run the development server:
+Install the required dependencies:
+```bash
+npm install
+```
+
+run the development server:
 
 ```bash
 npm run dev

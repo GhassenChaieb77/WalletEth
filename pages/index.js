@@ -1,91 +1,73 @@
-import React, { useState, useEffect } from 'react';
-import { useConnect, useAccount, useDisconnect, useEnsAvatar, useEnsName } from 'wagmi';
-import { SendTransaction } from './send';
-import { ERC20Token } from './load';
+import React, { useState } from 'react'; // Import React and useState hooks for managing component state
+import { useConnect, useAccount, useDisconnect, useEnsAvatar, useEnsName } from 'wagmi'; // Import Wagmi hooks for connecting wallet, managing account, and interacting with ENS
+import { SendTransaction } from './send'; // Import SendTransaction component for sending transactions
+import LoadERC20Token from "./load"; // Import LoadERC20Token component for loading token information
 
 export default function Home() {
-  const { connect, connectors } = useConnect();
-  const { address, connector, isConnected, error, isReconnected } = useAccount();
-  const { data: ensName } = useEnsName({ address });
-  const { disconnect } = useDisconnect();
-  const [contractAddress, setContractAddress] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
-  const [successMessage, setSuccessMessage] = useState('');
+  // Define state variable to store contract address
 
-  useEffect(() => {
-    if (!isConnected) {
-      // Attempt to auto-connect using the first available connector
-      connect({ connector: connectors[0] });
-    }
-  }, [isConnected]);
-
-  const handleInputChange = (event) => {
-    setContractAddress(event.target.value);
+  // Mock token data
+  const mockToken = {
+    name: "Mock Token",
+    symbol: "MTK",
+    balance: "1000000000000000000",
+    address: "0xDEADBEEFDEADBEEFDEADBEEFDEADBEEFDEADBEEFDEADBEEF",
   };
 
-  const handleSubmit = () => {
-    // Clear any previous error or success messages
-    setErrorMessage('');
-    setSuccessMessage('');
+  
+  // Wagmi hooks for connecting wallet and managing account
+  const { connect, connectors } = useConnect(); // Hook for connecting to a wallet
+  const { address, connector, isConnected, error } = useAccount(); // Hook for accessing connected account information
+  const { data: ensName } = useEnsName({ address }); // Hook for resolving ENS name for connected address
+  const { disconnect } = useDisconnect(); // Hook for disconnecting from the connected wallet
 
-    // Attempt to load token information
-    try {
-      <ERC20Token contractAddress={contractAddress} />;
-      setSuccessMessage('Token information loaded successfully.');
-    } catch (error) {
-      setErrorMessage(`Error loading token information: ${error.message}`);
-    }
-  };
 
   if (isConnected) {
+
     return (
+
       <main>
-        <div className="container">
-        <hr></hr>
-        <br></br>
-        <div>{ensName ? `${ensName} (${address})` : address}</div>
-        <h1>User Information</h1>
-        <div>Connected to {connector.name}</div>
-        <button onClick={disconnect}>Disconnect</button>
-</div>
-        <div className="container">
-          <h1>User Transactions</h1>
+        <div class="container">
+          <h1>User Informations</h1>
+          {ensName ? `${ensName} (${address})` : address}
+          <div>Connected to {connector.name}</div>
+          <button onClick={disconnect}>Disconnect</button>
+        </div>
+
+        <div class="container">
+          <h1>User Transaction</h1>
           <hr></hr>
           <br></br>
           <SendTransaction />
         </div>
 
-        <div>
-          <div className="container">
-            <hr></hr>
-            <br></br>
-            <h1>Chargement des Informations du Token ERC-20</h1>
-
-            <form onSubmit={handleSubmit}>
-              <label>Adresse du contrat ERC-20:</label>
-              <input type="text" value={contractAddress} onChange={handleInputChange} />
-              <input type="submit" value="Charger" />
-            </form>
-
-            {errorMessage && <div className="error-message">{errorMessage}</div>}
-            {successMessage && <div className="success-message">{successMessage}</div>}
-          </div>
+        <div class="container">
+          <h1>Chargement des Informations du Token ERC-20</h1>
+          <h3>Mock test token : 0xDEADBEEFDEADBEEFDEADBEEFDEADBEEFDEADBEEFDEADBEEF</h3>
+          <LoadERC20Token mockToken={mockToken} />
         </div>
       </main>
+
+      
     );
+
   } else {
     return (
       <main>
-        <div className="container">
+        <div class="container">
           <h1>Login</h1>
 
           {connectors.map((connector) => (
-            <button key={connector.id} onClick={() => connect({ connector })}>
+            <button
+              key={connector.id}
+              onClick={() => connect({ connector })}
+            >
               {connector.name}
             </button>
           ))}
 
-          {error && <div className="error-message">{error.message}</div>}
+          {/* Display error message if connection fails */}
+          {error && <div>{error.message}</div>}
         </div>
       </main>
     );

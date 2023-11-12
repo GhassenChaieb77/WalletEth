@@ -1,55 +1,68 @@
-import * as React from 'react'
-import { useDebounce } from 'use-debounce'
+import * as React from 'react'; // Import React library for creating UI components
+import { useDebounce } from 'use-debounce'; // Import useDebounce hook for debouncing inputs
 import {
   usePrepareSendTransaction,
   useSendTransaction,
   useWaitForTransaction,
-} from 'wagmi'
-import { parseEther } from 'viem'
+} from 'wagmi'; // Import Wagmi hooks for preparing, sending, and waiting for transactions
+import { parseEther } from 'viem'; // Import parseEther function for converting ether values
 
 export function SendTransaction() {
-  const [to, setTo] = React.useState('')
-  const [debouncedTo] = useDebounce(to, 500)
+  // State variables to store recipient address and amount
+  const [to, setTo] = React.useState('');
+  const [amount, setAmount] = React.useState('');
 
-  const [amount, setAmount] = React.useState('')
-  const [debouncedAmount] = useDebounce(amount, 500)
+  // Debounced versions of to and amount for better performance
+  const [debouncedTo] = useDebounce(to, 500); // Debounce to input with 500ms delay
+  const [debouncedAmount] = useDebounce(amount, 500); // Debounce amount input with 500ms delay
 
+  // Use prepareSendTransaction hook to prepare the transaction config
   const { config } = usePrepareSendTransaction({
-    to: debouncedTo,
-    value: debouncedAmount ? parseEther(debouncedAmount) : undefined,
-  })
-  const { data, sendTransaction, } = useSendTransaction(config)
+    to: debouncedTo, // Debounced recipient address
+    value: debouncedAmount ? parseEther(debouncedAmount) : undefined, // Debounced amount parsed to ether
+  });
 
+  // Use sendTransaction hook to send the transaction
+  const { data, sendTransaction } = useSendTransaction(config);
+
+  // Use waitForTransaction hook to wait for transaction confirmation
   const { isLoading, isSuccess } = useWaitForTransaction({
-    hash: data?.hash,
-  })
+    hash: data?.hash, // Transaction hash obtained from sendTransaction
+  });
 
   return (
     <form
       onSubmit={(e) => {
-        e.preventDefault()
-        sendTransaction?.()
+        e.preventDefault(); // Prevent default form submission behavior
+        sendTransaction?.(); // Execute the sendTransaction function
       }}
     >
       <input
-        aria-label="Recipient"
-        onChange={(e) => setTo(e.target.value)}
-        placeholder="0xA0Cf…251e"
-        value={to}
+        aria-label="Recipient" // Accessibility label for recipient input
+        onChange={(e) => setTo(e.target.value)} // Update recipient state on input change
+        placeholder="0xA0Cf…251e" // Placeholder text for recipient input
+        value={to} // Display current recipient value
       />
-      <input
-        aria-label="Amount (ether)"
-        onChange={(e) => setAmount(e.target.value)}
-        placeholder="0.05"
-        value={amount}
-      />
-      <button type="submit" disabled={isLoading || !sendTransaction || !to || !amount}>
-        {isLoading ? 'Sending...' : 'Send'}
-      </button>
-      {isLoading && <div>Check Wallet</div>}
-      {isSuccess && <div>Transaction: {JSON.stringify(data)}</div>}
 
-      {isSuccess && (
+      <input
+        aria-label="Amount (ether)" // Accessibility label for amount input
+        onChange={(e) => setAmount(e.target.value)} // Update amount state on input change
+        placeholder="0.05" // Placeholder text for amount input
+        value={amount} // Display current amount value
+      />
+
+      <button
+        type="submit" // Submit button type
+        disabled={isLoading || !sendTransaction || !to || !amount} // Disable button if transaction is loading, sendTransaction is not available, or recipient/amount is empty
+      >
+        {isLoading ? 'Sending...' : 'Send'} 
+      </button>
+
+      {isLoading && <div>Check Wallet</div>} 
+
+      {isSuccess && <div>Transaction: {JSON.stringify(data)}</div>} 
+
+      {isSuccess && ( // Display success message and Etherscan link if transaction is successful
         <div>
           Successfully sent {amount} ether to {to}
           <div>
@@ -58,5 +71,5 @@ export function SendTransaction() {
         </div>
       )}
     </form>
-  )
+  );
 }

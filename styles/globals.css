@@ -1,0 +1,46 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0; /* Set your desired background color */
+  }
+  
+  .container {
+    width: 50%;
+    margin: auto;
+    text-align: center;
+  }
+  
+  h1 {
+    color: #333; /* Set your desired heading text color */
+  }
+  
+  input, button {
+    padding: 8px; /* Reduce padding for a smaller button */
+    margin: 5px 0;
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  button {
+    background-color: #4caf50; /* Set your desired button background color */
+    color: #fff; /* Set your desired button text color */
+    border: none;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #45a049; /* Set your desired button background color on hover */
+  }
+  
+
+  .error-message {
+    color: red;
+    font-weight: bold;
+  }
+  
+  .success-message {
+    color: green;
+    font-weight: bold;
+  }
